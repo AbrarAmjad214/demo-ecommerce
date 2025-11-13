@@ -215,7 +215,7 @@ function sendOrder() {
 
   const note = document.getElementById("note").value;
   const location = document.getElementById("location").value;
-  const numberMap = {"Dubai":"971567429789","Sharjah":"971567429789"};
+  const numberMap = {"Dubai":"971501562860","Sharjah":"971501562860"};
   const number = numberMap[location] || '';
   const orderId = generateOrderId();
   const grandTotal = cart.reduce((sum, item) => sum + item.qty * item.price, 0);
