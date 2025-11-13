@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from demo.myap.online/list-categories.php by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Nov 2025 12:32:55 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+  <title>All Categories</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Gradient Background */
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+    }
+
+    .background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(-75deg, #000000, #F5F5F5,  #F5F5F5, #F5F5F5, #000000);
+      background-size: 400% 400%;
+      animation: gradientShift 19s ease infinite;
+      z-index: -1;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    body {
+      padding: 10px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    h2 {
+      margin-bottom: 2px;
+    }
+
+    #categorySearch {
+      width: 90%;
+      max-width: 400px;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 30px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .category-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 400px;
+      margin: auto;
+    }
+
+    .category-list a {
+      background: #e2e2e2;
+      color: Black;
+      text-decoration: none;
+      padding: 12px 20px;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: left;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      transition: background 0.3s;
+    }
+
+    .category-list a:hover {
+      background: #006aaa;
+      color: white;
+    }
+
+    .category-list a.matched {
+      background: #006aaa !important;
+      color: white;
+      font-weight: bold;
+    }
+
+    .offer-button {
+      display: block;
+      background: #006aaa;
+      text-align: center;
+      font-weight: bold;
+      width: 259px;
+      color: white;
+      padding: 12px 20px;
+      font-size: 16px;
+      margin: 15px auto;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .offer-button:hover {
+      background: #6e1300;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Animated Gradient Background -->
+  <div class="background"></div>
+
+  <!-- Main Content -->
+  <h2 style="text-align:center;">
+    <a href="cart.html" class="offer-button">Search Product</a>
+  </h2>
+
+  <input type="text" id="categorySearch" placeholder="Search category..." onkeyup="reorderCategories()">
+
+  <div class="category-list" id="categoryList">
+          <a href="view-category24c2.html?cat=Cosmetics" data-name="cosmetics">Cosmetics</a>
+          <a href="view-category0b9d.html?cat=Flower+And+Bouquet" data-name="flower and bouquet">Flower And Bouquet</a>
+          <a href="view-categoryb9f5.html?cat=Ice+Creams+Recipes" data-name="ice creams recipes">Ice Creams Recipes</a>
+          <a href="view-category6fe5.html?cat=Juices+And+Snakes" data-name="juices and snakes">Juices And Snakes</a>
+          <a href="view-category4fd7.html?cat=Restaurants+%26+Cafeteria" data-name="restaurants & cafeteria">Restaurants &amp; Cafeteria</a>
+          <a href="view-category1b35.html?cat=Soft+Drinks" data-name="soft drinks">Soft Drinks</a>
+          <a href="view-category953b.html?cat=Stationery+Products" data-name="stationery products">Stationery Products</a>
+          <a href="view-categorye3e4.html?cat=Tools+%26+Hardware" data-name="tools & hardware">Tools &amp; Hardware</a>
+          <a href="view-category78cd.html?cat=Vegitables" data-name="vegitables">Vegitables</a>
+      </div>
+
+  <script>
+    function reorderCategories() {
+      const input = document.getElementById("categorySearch").value.toLowerCase();
+      const container = document.getElementById("categoryList");
+      const items = Array.from(container.children);
+
+      items.forEach(link => {
+        const isMatch = link.dataset.name.includes(input);
+        link.classList.toggle("matched", isMatch && input);
+      });
+
+      items.sort((a, b) => {
+        const aMatch = a.dataset.name.includes(input) ? 0 : 1;
+        const bMatch = b.dataset.name.includes(input) ? 0 : 1;
+        return aMatch - bMatch || a.dataset.name.localeCompare(b.dataset.name);
+      });
+
+      items.forEach(item => container.appendChild(item));
+    }
+  </script>
+
+  <script>
+    // Disable Right Click
+    document.addEventListener('contextmenu', event => event.preventDefault());
+
+    // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+S
+    document.onkeydown = function(e) {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.key.toLowerCase() === "u") ||
+        (e.ctrlKey && e.key.toLowerCase() === "s") ||
+        (e.ctrlKey && e.shiftKey && (
+          e.key.toLowerCase() === "i" ||
+          e.key.toLowerCase() === "j" ||
+          e.key.toLowerCase() === "c"
+        ))
+      ) {
+        e.preventDefault();
+        return false;
+      }
+    };
+  </script>
+  
+  <div>
+  <a href="https://wa.me/971567429789" target="_blank" 
+     class="whatsapp-float">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <link rel="stylesheet" href="../cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+  <style>
+    /* WhatsApp Button Style */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25D366;
+      color: white;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      text-align: center;
+      font-size: 30px;
+      box-shadow: 2px 2px 3px #999;
+      z-index: 1000;
+      animation: floatUpDown 3s ease-in-out infinite; /* <-- Animation applied here */
+    }
+
+    .whatsapp-float i {
+      margin-top: 15px;
+    }
+
+    /* Floating Animation Keyframes */
+    @keyframes floatUpDown {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+  </style>
+</div>
+
+
+
+<link rel="stylesheet" href="../cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</div>
+  
+</body>
+
+<!-- Mirrored from demo.myap.online/list-categories.php by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Nov 2025 12:32:55 GMT -->
+</html>
+

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from demo.myap.online/cart.php by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Nov 2025 12:30:39 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+  <title>My Cart</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="../cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    h2 { text-align: center; }
+    body {
+  font-family: sans-serif;
+  padding: 20px;
+  background: #f4f4f4;
+}
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.cart-item {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 10px;
+  border-bottom: 1px solid #ddd;
+  background: white;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+.cart-item div {
+  margin-bottom: 5px;
+}
+.qty-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 5px;
+}
+.qty-controls button {
+  padding: 6px 12px;
+  font-size: 16px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.remove-btn {
+  background: transparent;
+  color: black;
+  padding: 6px 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+.grand-total {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 30px;
+}
+.controls {
+  text-align: center;
+  margin-top: 25px;
+}
+.controls select,
+.controls input[type="text"] {
+  padding: 10px;
+  font-size: 16px;
+  width: 90%;
+  max-width: 300px;
+  margin: 8px auto;
+  display: block;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+button.send-order,
+button.download-pdf {
+  margin-top: 12px;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.send-order {
+  background: green;
+  color: white;
+}
+.download-pdf {
+  background: #006aaa;
+  color: white;
+}
+@media (max-width: 600px) {
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .item-subtotal, .qty-controls {
+    width: 100%;
+  }
+}
+
+    .offer-button {
+  display: inline-block;
+  background: #06005f;
+  font-weight: bold;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  margin: 15px auto;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+.offer-button:hover {
+  background: green;
+  color: white;
+}
+    
+    
+    
+    
+    
+  </style>
+</head>
+<body>
+  <h2>My Cart</h2>
+  <div id="cart-items"></div>
+
+  <div class="grand-total">
+    <strong>Grand Total: AED <span id="grand-total">0.00</span></strong>
+  </div>
+
+  <div class="controls">
+    <select id="location">
+              <option>Dubai</option>
+              <option>Sharjah</option>
+          </select><br>
+    <input type="text" id="note" placeholder="Enter Mobile or Instructions (Optional)" maxlength="40"><br>
+    <button class="send-order" style="width:250px;" onclick="sendOrder()">Send Order to WhatsApp</button>
+    <button class="download-pdf" style="width:250px;" onclick="downloadPDF()">Download PDF</button>
+    <a href="list-categories.html" style="width:250px;" class="offer-button">Continue Shoping</a>
+  </div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+function updateCartDisplay() {
+  const container = document.getElementById("cart-items");
+  const totalDisplay = document.getElementById("grand-total");
+  container.innerHTML = "";
+  let grandTotal = 0;
+
+  if (cart.length === 0) {
+    container.innerHTML = "<p style='text-align:center;'>Your cart is empty.</p>";
+    totalDisplay.innerText = "0.00";
+    return;
+  }
+
+  cart.forEach((item, index) => {
+    const subtotal = item.qty * item.price;
+    grandTotal += subtotal;
+    const div = document.createElement("div");
+    div.className = "cart-item";
+    div.innerHTML = `
+      <div><strong>${item.name}</strong> (${item.unit})</div>
+      <div class="qty-controls">
+        <button onclick="changeQty(${index}, -1)">−</button>
+        <span>${item.qty}</span>
+        <button onclick="changeQty(${index}, 1)">+</button>
+        <div style="width: 199px; height: 5px; background-color: silver;"></div>
+        <button class="remove-btn" style="background-color: red;" onclick="removeItem(${index})">×</button>
+      </div>
+      <div>AED ${(subtotal).toFixed(2)}</div>
+    `;
+    container.appendChild(div);
+  });
+
+  totalDisplay.innerText = grandTotal.toFixed(2);
+}
+
+function changeQty(index, delta) {
+  cart[index].qty += delta;
+  if (cart[index].qty < 1) cart[index].qty = 1;
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartDisplay();
+}
+
+function removeItem(index) {
+  cart.splice(index, 1);
+  localStorage.setItem("cart", JSON.stringify(cart));
+  updateCartDisplay();
+}
+
+function generateOrderId() {
+  return 'DEMO-ORD-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+}
+
+function saveOrder(orderId, location, note, products) {
+  fetch('save_order.html', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({orderId, location, note, products, from_whatsapp: false})
+  });
+}
+
+function sendOrder() {
+  if (cart.length === 0) return alert("Your cart is empty.");
+
+  const note = document.getElementById("note").value;
+  const location = document.getElementById("location").value;
+  const numberMap = {"Dubai":"971567429789","Sharjah":"971567429789"};
+  const number = numberMap[location] || '';
+  const orderId = generateOrderId();
+  const grandTotal = cart.reduce((sum, item) => sum + item.qty * item.price, 0);
+
+  const msg = `*Order: ${orderId}*%0A` + cart.map(p =>
+    `➤ ${p.id}: ${p.qty} ${p.unit} x ${p.price} = ${(p.qty * p.price).toFixed(2)}`
+  ).join('%0A') + `%0A*Grand Total: AED ${grandTotal.toFixed(2)}*%0ANote: ${note}`;
+
+  saveOrder(orderId, location, note, cart);
+
+  if (msg.length <= 900) {
+    // ✅ Short message: send full order to WhatsApp
+    window.open('https://wa.me/' + number + '?text=' + msg, '_blank');
+    localStorage.removeItem("cart");
+    updateCartDisplay();
+  } else {
+    // 📎 Long message: send summary with PDF link
+    const encodedId = encodeURIComponent(orderId);
+   const summary = `*Order: ${orderId}*%0AItems: ${cart.length}%0AGrand Total: AED ${grandTotal.toFixed(2)}%0A🧾 Full Order PDF: https://demo.myap.online/orders/${encodedId}_order.pdf%0ANote: ${note}`;
+
+    window.open('https://wa.me/' + number + '?text=' + summary, '_blank');
+
+    // Generate PDF using save_pdf.php
+    fetch('save_pdf.html', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({orderId, location, note, cart, grandTotal})
+    }).then(() => {
+      localStorage.removeItem("cart");
+      updateCartDisplay();
+    });
+  }
+}
+
+
+
+async function downloadPDF() {
+  if (cart.length === 0) return alert("Your cart is empty.");
+  const note = document.getElementById("note").value;
+  const location = document.getElementById("location").value;
+  const orderId = generateOrderId();
+  const grandTotal = cart.reduce((sum, item) => sum + item.qty * item.price, 0);
+
+  saveOrder(orderId, location, note, cart);
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  let y = 10;
+  doc.setFontSize(14);
+  doc.text("Order ID: " + orderId, 10, y);
+  y += 10;
+  cart.forEach(p => {
+    doc.setFontSize(12);
+    doc.text(`• ${p.name}: ${p.qty} x ${p.price} = AED ${(p.qty * p.price).toFixed(2)}`, 10, y);
+    y += 8;
+  });
+  y += 5;
+  doc.setFontSize(13);
+  doc.text("Grand Total: AED " + grandTotal.toFixed(2), 10, y);
+  y += 8;
+  doc.setFontSize(12);
+  doc.text("Location: " + location, 10, y);
+  y += 7;
+  if (note) {
+    doc.text("Instructions: " + note, 10, y);
+  }
+
+  doc.save(orderId + "_order.pdf");
+  localStorage.removeItem("cart");
+updateCartDisplay();
+
+}
+
+updateCartDisplay();
+</script>
+
+
+
+<script>
+// Disable Right Click
+document.addEventListener('contextmenu', event => event.preventDefault());
+
+// Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+S
+document.onkeydown = function(e) {
+  if (
+    e.key === "F12" ||
+    (e.ctrlKey && e.key.toLowerCase() === "u") ||
+    (e.ctrlKey && e.key.toLowerCase() === "s") ||
+    (e.ctrlKey && e.shiftKey && (
+      e.key.toLowerCase() === "i" ||
+      e.key.toLowerCase() === "j" ||
+      e.key.toLowerCase() === "c"
+    ))
+  ) {
+    e.preventDefault();
+    return false;
+  }
+};
+</script>
+
+
+</body>
+
+<!-- Mirrored from demo.myap.online/cart.php by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Nov 2025 12:30:44 GMT -->
+</html>

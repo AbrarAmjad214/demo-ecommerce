@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from demo.myap.online/view-category.php?cat=Ice+Creams+Recipes by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Nov 2025 12:31:10 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+  <title>Ice Creams Recipes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    /* ===== Base ===== */
+    body { font-family: sans-serif; margin: 0; padding: 10px; text-align: center; background: #f9f9f9; }
+
+    .logo-container { text-align: center; margin-bottom: 2px; }
+    .logo-container img { max-width: 120px; height: auto; }
+
+    .woutap { text-align: center; margin-bottom: 10px; font-size: 14px; }
+    .woutap img { max-width: 350px; height: auto; }
+
+    h2 { margin-bottom: 15px; }
+
+    .top-buttons a {
+      margin: 5px;
+      padding: 10px 16px;
+      background: #006aaa;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    /* ===== Product Grid (desktop default: same visual feel) ===== */
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .product {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      width: 300px;                 /* desktop card width unchanged */
+      padding: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.24);
+      text-align: center;             /* helps titles wrap nicely on mobile */
+    }
+
+    /* Product thumbnail: square like the screenshot */
+    .product .thumb {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .product .title {
+      font-size: 19px;
+      font-weight: bold;
+      margin-top: 8px;
+      line-height: 1.25;
+    }
+    .product .meta { font-size: 12px; color: #555; }
+
+    .qty {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 5px 0;
+    }
+    .qty input {
+      width: 80px;
+      text-align: center;
+      font-size: 18px;
+    }
+    button {
+      padding: 12px 20px;
+      background: #006aaa;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .subtotal {
+      font-size: 18px;
+      margin-top: 10px;
+      margin-bottom: 7px;
+      color: #052ae7;
+      text-align: center;
+    }
+
+    /* ===== Category / Offer widgets ===== */
+    .category-banner {
+      display: block;
+      background: #d1ecf1;
+      color: #0c5460;
+      padding: 14px 20px;
+      border-radius: 8px;
+      margin: 15px auto;
+      max-width: 600px;
+      font-size: 16px;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: background 0.3s;
+      font-weight: 500;
+    }
+    .category-banner:hover { background: #c0e5eb; }
+
+    .offer-button {
+      display: inline-block;
+      background: #28a745;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 15px auto;
+      text-decoration: none;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      transition: background 0.3s;
+    }
+    .offer-button:hover { background: #218838; }
+
+    /* ===== MOBILE: two-up layout exactly like screenshot ===== */
+    /* Trigger for typical phones */
+    @media (max-width: 600px) {
+      /* Use grid to lock two cards per row */
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+        justify-items: stretch;
+      }
+      
+      .product {
+        width: auto;               /* let grid control sizing */
+        padding: 8px;
+      }
+      .product .title {
+        font-size: 16px;
+        margin-top: 6px;
+      }
+      .product strong,
+      .product .subtotal { font-size: 16px; }
+
+      .qty { gap: 6px; }
+      .qty input { width: 56px; font-size: 16px; }
+      .qty button { padding: 10px 14px; }
+
+      /* Make main CTA fill card width like in the screenshot */
+      .product button { width: 100%; font-size: 14px; }
+
+      /* Top nav buttons: full width blocks on mobile for easy taps */
+      .top-buttons a > div { width: auto !important; }
+      .top-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        justify-items: stretch;
+      }
+      .top-buttons a {
+        padding: 8px 10px;
+      }
+
+      /* Tweak global text-align back to left inside cards; keep center elsewhere */
+      .product * { text-align: center; }
+      .subtotal, .qty { text-align: center; }
+    }
+
+    /* Smaller phones */
+    @media (max-width: 380px) {
+      .product .title { font-size: 14px; }
+      .product strong { font-size: 15px; }
+      .product button { font-size: 13px; }
+    }
+    
+    
+    /* Force smaller Add to WhatsApp button text ONLY on mobile screens */
+@media (max-width: 600px) {
+  .product button {
+    font-size: 13px !important;   /* overrides inline font-size:16px */
+    padding: 8px 12px !important; /* reduces button height for mobile only */
+  }
+}
+
+    @media (max-width: 600px) {
+  /* two-up layout (optional if you already have this) */
+  .top-buttons {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  /* shrink the outer <a> which currently has big padding */
+  .top-buttons a {
+    padding: 0 !important;        /* remove big padding on the link */
+    margin: 0 !important;         /* tighten spacing */
+    display: block !important;    /* make it fill its grid cell */
+    border-radius: 5px;          /* keep rounded look */
+  }
+
+  /* control the tap area size inside */
+  .top-buttons a > div {
+    width: auto !important;
+    font-size: 0.9rem !important;     /* already reduced text */
+    padding: 10px 14px !important;     /* <-- this sets the button HEIGHT */
+    line-height: 1.2 !important;
+  }
+}
+
+    
+    /* Ensure grid items stretch to same height in a row */
+.product-grid { align-items: stretch; }
+
+/* Consistent square image (already added earlier, keep it) */
+.product .thumb {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+/* Mobile-only equalization */
+@media (max-width: 600px) {
+  /* Make each card a column and push the CTA to the bottom */
+  .product {
+    display: flex;
+    flex-direction: column;
+  }
+  /* Reserve consistent space for the title and clamp long names */
+  .product .title {
+    line-height: 1.2;
+    min-height: 2.4em;                  /* ~2 lines x 1.2 line-height */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;              /* show at most 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  /* (Optional) keep ID line height consistent too */
+  .product .meta {
+    min-height: 1.1em;
+  }
+  /* Keep buttons aligned at the bottom of every card */
+  .product button {
+    margin-top: auto;                   /* takes leftover space above the button */
+  }
+}
+
+    
+  </style>
+</head>
+<body>
+
+  <div class="logo-container">
+    <img src="uploads/logo.png" alt="Company Logo">
+  </div>
+
+  <h2>Ice Creams Recipes</h2>
+
+  
+  <div class="top-buttons">
+    <a href="cart.html"><div style="width:275px; padding: 2px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 700; font-size: 1.1rem;">View Order Cart</div></a>
+    <a href="list-categories.html"><div style="width:275px; padding: 2px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 700; font-size: 1.1rem;">View All Categories</div></a>
+  </div>
+
+  
+  <div class="product-grid">
+                <div class="product">
+        <!-- NOTE: Only change here is adding class="thumb" and removing inline width/height
+             so CSS can make it square & responsive. Functionality is untouched. -->
+        <img class="thumb" src="uploads/img_6873cfa362eb3.webp" alt="Berry Ice Cream" loading="lazy">
+        <div class="title">Berry Ice Cream (Glass)</div>
+        <div class="meta">ID: C103</div><br>
+        <strong>Price: AED 16</strong><br>
+        <div class="qty">
+          <button onclick="updateQty('C103', -1)">−</button>
+          <input id="qty-C103" data-id="C103" data-name="Berry Ice Cream" data-unit="Glass" data-price="16" value="0" readonly>
+          <button onclick="updateQty('C103', 1)">+</button>
+        </div>
+        <div class="subtotal"><strong>TOTAL: AED <span id="sub-C103">0.00</span></strong></div>
+        <button style="font-size:16px; font-family: Arial;" onclick="addToCart('C103')"><strong>Add to WhatsAap</strong></button>
+      </div>
+                <div class="product">
+        <!-- NOTE: Only change here is adding class="thumb" and removing inline width/height
+             so CSS can make it square & responsive. Functionality is untouched. -->
+        <img class="thumb" src="uploads/img_6873ce1c66c75.webp" alt="Bunny Ice Cream" loading="lazy">
+        <div class="title">Bunny Ice Cream (Cup)</div>
+        <div class="meta">ID: C104</div><br>
+        <strong>Price: AED 20</strong><br>
+        <div class="qty">
+          <button onclick="updateQty('C104', -1)">−</button>
+          <input id="qty-C104" data-id="C104" data-name="Bunny Ice Cream" data-unit="Cup" data-price="20" value="0" readonly>
+          <button onclick="updateQty('C104', 1)">+</button>
+        </div>
+        <div class="subtotal"><strong>TOTAL: AED <span id="sub-C104">0.00</span></strong></div>
+        <button style="font-size:16px; font-family: Arial;" onclick="addToCart('C104')"><strong>Add to WhatsAap</strong></button>
+      </div>
+                <div class="product">
+        <!-- NOTE: Only change here is adding class="thumb" and removing inline width/height
+             so CSS can make it square & responsive. Functionality is untouched. -->
+        <img class="thumb" src="uploads/img_6873ce9512a0f.webp" alt="Strawberry Vanila" loading="lazy">
+        <div class="title">Strawberry Vanila (Cup)</div>
+        <div class="meta">ID: C106</div><br>
+        <strong>Price: AED 15</strong><br>
+        <div class="qty">
+          <button onclick="updateQty('C106', -1)">−</button>
+          <input id="qty-C106" data-id="C106" data-name="Strawberry Vanila" data-unit="Cup" data-price="15" value="0" readonly>
+          <button onclick="updateQty('C106', 1)">+</button>
+        </div>
+        <div class="subtotal"><strong>TOTAL: AED <span id="sub-C106">0.00</span></strong></div>
+        <button style="font-size:16px; font-family: Arial;" onclick="addToCart('C106')"><strong>Add to WhatsAap</strong></button>
+      </div>
+                <div class="product">
+        <!-- NOTE: Only change here is adding class="thumb" and removing inline width/height
+             so CSS can make it square & responsive. Functionality is untouched. -->
+        <img class="thumb" src="uploads/img_6873cec711174.webp" alt="Booster Ice Cream" loading="lazy">
+        <div class="title">Booster Ice Cream (Glass)</div>
+        <div class="meta">ID: C107</div><br>
+        <strong>Price: AED 20</strong><br>
+        <div class="qty">
+          <button onclick="updateQty('C107', -1)">−</button>
+          <input id="qty-C107" data-id="C107" data-name="Booster Ice Cream" data-unit="Glass" data-price="20" value="0" readonly>
+          <button onclick="updateQty('C107', 1)">+</button>
+        </div>
+        <div class="subtotal"><strong>TOTAL: AED <span id="sub-C107">0.00</span></strong></div>
+        <button style="font-size:16px; font-family: Arial;" onclick="addToCart('C107')"><strong>Add to WhatsAap</strong></button>
+      </div>
+                <div class="product">
+        <!-- NOTE: Only change here is adding class="thumb" and removing inline width/height
+             so CSS can make it square & responsive. Functionality is untouched. -->
+        <img class="thumb" src="uploads/img_6873cf08c682f.webp" alt="Strawberry Creamy" loading="lazy">
+        <div class="title">Strawberry Creamy (Cup)</div>
+        <div class="meta">ID: C108</div><br>
+        <strong>Price: AED 18</strong><br>
+        <div class="qty">
+          <button onclick="updateQty('C108', -1)">−</button>
+          <input id="qty-C108" data-id="C108" data-name="Strawberry Creamy" data-unit="Cup" data-price="18" value="0" readonly>
+          <button onclick="updateQty('C108', 1)">+</button>
+        </div>
+        <div class="subtotal"><strong>TOTAL: AED <span id="sub-C108">0.00</span></strong></div>
+        <button style="font-size:16px; font-family: Arial;" onclick="addToCart('C108')"><strong>Add to WhatsAap</strong></button>
+      </div>
+                <div class="product">
+        <!-- NOTE: Only change here is adding class="thumb" and removing inline width/height
+             so CSS can make it square & responsive. Functionality is untouched. -->
+        <img class="thumb" src="uploads/img_6873cf43a750d.webp" alt="Top Fruits Ice Cream" loading="lazy">
+        <div class="title">Top Fruits Ice Cream (Cup)</div>
+        <div class="meta">ID: C109</div><br>
+        <strong>Price: AED 16</strong><br>
+        <div class="qty">
+          <button onclick="updateQty('C109', -1)">−</button>
+          <input id="qty-C109" data-id="C109" data-name="Top Fruits Ice Cream" data-unit="Cup" data-price="16" value="0" readonly>
+          <button onclick="updateQty('C109', 1)">+</button>
+        </div>
+        <div class="subtotal"><strong>TOTAL: AED <span id="sub-C109">0.00</span></strong></div>
+        <button style="font-size:16px; font-family: Arial;" onclick="addToCart('C109')"><strong>Add to WhatsAap</strong></button>
+      </div>
+                <div class="product">
+        <!-- NOTE: Only change here is adding class="thumb" and removing inline width/height
+             so CSS can make it square & responsive. Functionality is untouched. -->
+        <img class="thumb" src="uploads/img_6873cd719bb53.webp" alt="Caramel Ice Cream" loading="lazy">
+        <div class="title">Caramel Ice Cream (Cup)</div>
+        <div class="meta">ID: C101</div><br>
+        <strong>Price: AED 25</strong><br>
+        <div class="qty">
+          <button onclick="updateQty('C101', -1)">−</button>
+          <input id="qty-C101" data-id="C101" data-name="Caramel Ice Cream" data-unit="Cup" data-price="25" value="0" readonly>
+          <button onclick="updateQty('C101', 1)">+</button>
+        </div>
+        <div class="subtotal"><strong>TOTAL: AED <span id="sub-C101">0.00</span></strong></div>
+        <button style="font-size:16px; font-family: Arial;" onclick="addToCart('C101')"><strong>Add to WhatsAap</strong></button>
+      </div>
+                <div class="product">
+        <!-- NOTE: Only change here is adding class="thumb" and removing inline width/height
+             so CSS can make it square & responsive. Functionality is untouched. -->
+        <img class="thumb" src="uploads/img_6873cdb181b53.webp" alt="Choc Ice Cream" loading="lazy">
+        <div class="title">Choc Ice Cream (Cup)</div>
+        <div class="meta">ID: C102</div><br>
+        <strong>Price: AED 18</strong><br>
+        <div class="qty">
+          <button onclick="updateQty('C102', -1)">−</button>
+          <input id="qty-C102" data-id="C102" data-name="Choc Ice Cream" data-unit="Cup" data-price="18" value="0" readonly>
+          <button onclick="updateQty('C102', 1)">+</button>
+        </div>
+        <div class="subtotal"><strong>TOTAL: AED <span id="sub-C102">0.00</span></strong></div>
+        <button style="font-size:16px; font-family: Arial;" onclick="addToCart('C102')"><strong>Add to WhatsAap</strong></button>
+      </div>
+                <div class="product">
+        <!-- NOTE: Only change here is adding class="thumb" and removing inline width/height
+             so CSS can make it square & responsive. Functionality is untouched. -->
+        <img class="thumb" src="uploads/img_6873ce61b738f.webp" alt="Double Coch Ice Cream" loading="lazy">
+        <div class="title">Double Coch Ice Cream (Cup)</div>
+        <div class="meta">ID: C105</div><br>
+        <strong>Price: AED 22</strong><br>
+        <div class="qty">
+          <button onclick="updateQty('C105', -1)">−</button>
+          <input id="qty-C105" data-id="C105" data-name="Double Coch Ice Cream" data-unit="Cup" data-price="22" value="0" readonly>
+          <button onclick="updateQty('C105', 1)">+</button>
+        </div>
+        <div class="subtotal"><strong>TOTAL: AED <span id="sub-C105">0.00</span></strong></div>
+        <button style="font-size:16px; font-family: Arial;" onclick="addToCart('C105')"><strong>Add to WhatsAap</strong></button>
+      </div>
+                <div class="product">
+        <!-- NOTE: Only change here is adding class="thumb" and removing inline width/height
+             so CSS can make it square & responsive. Functionality is untouched. -->
+        <img class="thumb" src="uploads/img_6873cf72a75b7.webp" alt="Your More Items" loading="lazy">
+        <div class="title">Your More Items (Pc)</div>
+        <div class="meta">ID: C110</div><br>
+        <strong>Price: AED 1</strong><br>
+        <div class="qty">
+          <button onclick="updateQty('C110', -1)">−</button>
+          <input id="qty-C110" data-id="C110" data-name="Your More Items" data-unit="Pc" data-price="1" value="0" readonly>
+          <button onclick="updateQty('C110', 1)">+</button>
+        </div>
+        <div class="subtotal"><strong>TOTAL: AED <span id="sub-C110">0.00</span></strong></div>
+        <button style="font-size:16px; font-family: Arial;" onclick="addToCart('C110')"><strong>Add to WhatsAap</strong></button>
+      </div>
+      </div>
+
+  <script>
+  let totals = {}, prices = {};
+
+  function updateQty(id, delta) {
+    const qtyField = document.getElementById('qty-' + id);
+    let qty = parseInt(qtyField.value) + delta;
+    if (qty < 0) qty = 0;
+    qtyField.value = qty;
+
+    const price = parseFloat(qtyField.dataset.price);
+    const subtotal = qty * price;
+    document.getElementById('sub-' + id).innerText = subtotal.toFixed(2);
+    totals[id] = subtotal;
+  }
+
+  function addToCart(id) {
+    const input = document.getElementById('qty-' + id);
+    const qty = parseInt(input.value);
+    if (qty < 1) return alert("Please select quantity.");
+    const item = {
+      id: input.dataset.id,
+      name: input.dataset.name,
+      unit: input.dataset.unit,
+      price: parseFloat(input.dataset.price),
+      qty: qty
+    };
+    let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const existing = cart.find(p => p.id === item.id);
+    if (existing) {
+      existing.qty += qty;
+    } else {
+      cart.push(item);
+    }
+    localStorage.setItem("cart", JSON.stringify(cart));
+    input.value = 0;
+    document.getElementById('sub-' + id).innerText = '0.00';
+    alert("Added to cart!");
+  }
+  </script>
+
+  <!--<a href="/offers.php" target="_blank" class="offer-button">🎁 View Special Offers</a>-->
+
+  <div>
+    <meta charset="UTF-8">
+    <title>Image Slider</title>
+    <style>
+      .slider-container { width: auto; height: 170px; overflow: hidden; position: relative; }
+      .slider-track { display: flex; position: absolute; top: 10px; left: 0; height: 100%; animation: slide 40s linear infinite; }
+      .slider-track img { width: 150px; height: 150px; margin-right: 79px; flex-shrink: 0; }
+      @keyframes slide { 0% { transform: translateX(0%);} 100% { transform: translateX(-100%);} }
+    </style>
+  </div>
+
+  <!--<marquee direction="left" scrollamount="5" style="background-color: yellow; color: darkblue; font-size: 20px; font-weight: bold; padding: 10px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
+    🌟 Welcome to Our Website! Enjoy Great Deals Everyday! 🌟
+  </marquee>-->
+
+  <div class="slider-container">
+  <div class="slider-track" id="sliderTrack">
+    <img src="https://assets.zyrosite.com/Yg2jz4Gqr0uggZZe/1-YD0lx9nzX1H27PPa.webp" alt="Product 1">
+    <img src="https://assets.zyrosite.com/Yg2jz4Gqr0uggZZe/34-YrDW72o0g6sn5E8g.webp" alt="Product 2">
+    <img src="https://assets.zyrosite.com/Yg2jz4Gqr0uggZZe/35-AE0PLeXzQPS85M6W.webp" alt="Product 3">
+    <img src="https://assets.zyrosite.com/Yg2jz4Gqr0uggZZe/33-AzGXb91nK4hNylMd.webp" alt="Product 4">
+    <img src="https://assets.zyrosite.com/Yg2jz4Gqr0uggZZe/32-YrDW72o0g2IgM47k.webp" alt="Product 5">
+    <img src="https://assets.zyrosite.com/Yg2jz4Gqr0uggZZe/31-AE0PLeXzZZFrP5Og.webp" alt="Product 6">
+    <img src="https://assets.zyrosite.com/Yg2jz4Gqr0uggZZe/30-mv0WNeyovvIvNGJ9.webp" alt="Product 7">
+    <img src="https://assets.zyrosite.com/Yg2jz4Gqr0uggZZe/29-mP4OJ9voW5c2BGg0.webp" alt="Product 8">
+    <img src="https://assets.zyrosite.com/Yg2jz4Gqr0uggZZe/25-A0xl0qgQ9Puy73xZ.webp" alt="Product 9">
+    <img src="https://assets.zyrosite.com/Yg2jz4Gqr0uggZZe/20-AQExb1vMPBt1aWMe.webp" alt="Product 10">
+    <img src="https://assets.zyrosite.com/Yg2jz4Gqr0uggZZe/18-Aq2WEnykgquP0k2Z.webp" alt="Product 11">
+    <img src="https://assets.zyrosite.com/Yg2jz4Gqr0uggZZe/16-YKb3zpw9lyTWZ0Dl.webp" alt="Product 12">
+    <img src="https://assets.zyrosite.com/Yg2jz4Gqr0uggZZe/8-mjE7BykWKQurpW7b.webp" alt="Product 13">
+    <img src="https://assets.zyrosite.com/Yg2jz4Gqr0uggZZe/7-AVL7y90VgQCGxLa3.webp" alt="Product 14">
+    <img src="https://assets.zyrosite.com/Yg2jz4Gqr0uggZZe/6-A3Q2gNKWV3iJQZGZ.webp" alt="Product 15">
+    <img src="https://assets.zyrosite.com/Yg2jz4Gqr0uggZZe/3-YleWOjkZglcWR1P8.webp" alt="Product 16">
+    
+    
+  </div>
+</div>
+
+  <div class="top-buttons">
+    <a href="cart.html"><div style="width:275px; padding: 2px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 700; font-size: 1.1rem;">View Order Cart</div></a>
+    <a href="list-categories.html"><div style="width:275px; padding: 2px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 700; font-size: 1.1rem;">View All Categories</div></a>
+  </div>
+
+  <script>
+    const sliderTrack = document.getElementById("sliderTrack");
+    // Clone images for seamless loop
+    sliderTrack.innerHTML += sliderTrack.innerHTML;
+  </script>
+
+  <div class="woutap"><img src="uploads/whtsap.png" alt="whtsap"></div>
+
+  <!--<a href="/offers.php" class="category-banner" target="_blank">
+    🎁 <strong>Special Offer:</strong> Click here to view all limited-time deals!
+  </a>-->
+
+  <div class="woutap"><strong>Leen Al Zahra LLC</strong><br>Website: https://www.leenalzahra.com/order-app<br><a href="https://www.leenalzahra.com/" target="_blank" rel="noopener noreferrer">Visit More</a></div>
+
+  <script>
+  // Disable Right Click
+  document.addEventListener('contextmenu', event => event.preventDefault());
+
+  // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+S
+  document.onkeydown = function(e) {
+    if (
+      e.key === "F12" ||
+      (e.ctrlKey && e.key.toLowerCase() === "u") ||
+      (e.ctrlKey && e.key.toLowerCase() === "s") ||
+      (e.ctrlKey && e.shiftKey && (
+        e.key.toLowerCase() === "i" ||
+        e.key.toLowerCase() === "j" ||
+        e.key.toLowerCase() === "c"
+      ))
+    ) {
+      e.preventDefault();
+      return false;
+    }
+  };
+  </script>
+
+  <div>
+    <a href="https://wa.me/971567429789" target="_blank" class="whatsapp-float">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <link rel="stylesheet" href="../cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+      /* WhatsApp Button Style */
+      .whatsapp-float {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #25D366;
+        color: white;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        text-align: center;
+        font-size: 30px;
+        box-shadow: 2px 2px 3px #999;
+        z-index: 1000;
+        animation: floatUpDown 3s ease-in-out infinite;
+      }
+      .whatsapp-float i { margin-top: 15px; }
+      @keyframes floatUpDown {
+        0% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0); }
+      }
+    </style>
+  </div>
+
+  <link rel="stylesheet" href="../cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</body>
+
+<!-- Mirrored from demo.myap.online/view-category.php?cat=Ice+Creams+Recipes by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Nov 2025 12:31:24 GMT -->
+</html>
